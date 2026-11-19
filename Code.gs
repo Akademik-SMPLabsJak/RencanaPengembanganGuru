@@ -15,7 +15,7 @@ const KIRIM_EMAIL = false;
 const EMAIL_AKADEMIK = 'akademik@labschool.xyz';
 
 const HEADER = ['Waktu kirim', 'Nama', 'Email', 'Mapel/kelas', 'Data pendukung', 'Temuan utama',
-  'Butir dipilih', 'Kompetensi', 'Bentuk pengembangan', 'Dukungan', 'Penjelasan dukungan', 'Laporan', 'Data lengkap (JSON)'];
+  'Butir dipilih', 'Kompetensi', 'Bentuk pengembangan', 'Dukungan', 'Penjelasan dukungan', 'Laporan', 'Data lengkap (JSON)', 'Status laporan'];
 
 function doGet() {
   return ContentService.createTextOutput('Penerima form Rencana Pengembangan Diri Guru aktif.');
@@ -38,8 +38,11 @@ function simpan_(d) {
     const ss = ambilSheet_();
     const sh = siapkanSheet_(ss);
     const butir = d.butir || [];
-    let urlLaporan = '';
-    try { urlLaporan = buatLaporan_(d); } catch (err) { urlLaporan = 'Gagal membuat laporan: ' + err.message; }
+    let urlLaporan = '', status = 'OK';
+    try { urlLaporan = buatLaporan_(d); } catch (err) {
+      status = 'GAGAL: ' + (err && err.message || err);
+      console.error('Laporan gagal untuk ' + d.email + ': ' + (err && err.stack || err));
+    }
     sh.appendRow([
       new Date(), d.nama, d.email, d.mapel,
       (d.dataRef || []).join(', '), d.supervisi || '',
@@ -47,7 +50,7 @@ function simpan_(d) {
       Array.from(new Set(butir.map(b => b.kompetensi))).join(', '),
       (d.bentuk || []).join(', '),
       (d.dukungan || []).join(', '), d.dukunganKet || '',
-      urlLaporan, JSON.stringify(d),
+      urlLaporan, JSON.stringify(d), status,
     ]);
     if (KIRIM_EMAIL) {
       MailApp.sendEmail({
@@ -70,9 +73,7 @@ function buatLaporan_(d) {
   if (id) { try { doc = DocumentApp.openById(id); } catch (e) { doc = null; } }
   if (!doc) {
     doc = DocumentApp.create('Laporan Pengembangan Diri - ' + d.nama);
-    const file = DriveApp.getFileById(doc.getId());
-    folderLaporan_().addFile(file);
-    DriveApp.getRootFolder().removeFile(file);
+    DriveApp.getFileById(doc.getId()).moveTo(folderLaporan_());
     props.setProperty(kunci, doc.getId());
   }
   doc.setName('Laporan Pengembangan Diri - ' + d.nama);
@@ -107,7 +108,8 @@ function buatLaporan_(d) {
   body.appendParagraph('Catatan pimpinan').setHeading(DocumentApp.ParagraphHeading.HEADING2);
   body.appendParagraph('Persetujuan: ☐ Disetujui   ☐ Perlu revisi');
   body.appendParagraph('Komentar:');
-  body.appendParagraph('\n\n');
+  body.appendParagraph('');
+  body.appendParagraph('');
   body.appendParagraph('Butir kompetensi mengacu pada Pasal 8 Permendikdasmen No. 21 Tahun 2025.').editAsText().setFontSize(9);
   doc.saveAndClose();
   return doc.getUrl();
@@ -129,6 +131,9 @@ function siapkanSheet_(ss) {
     sh.appendRow(HEADER);
     sh.setFrozenRows(1);
     sh.getRange(1, 1, 1, HEADER.length).setFontWeight('bold');
+  } else if (sh.getRange(1, HEADER.length).getValue() !== HEADER[HEADER.length - 1]) {
+    // Sheet dari versi sebelumnya: perbarui baris judul (kolom baru ditambahkan di kanan).
+    sh.getRange(1, 1, 1, HEADER.length).setValues([HEADER]).setFontWeight('bold');
   }
   return sh;
 }
@@ -153,6 +158,26 @@ function siapkan() {
   const f = folderLaporan_();
   Logger.log('Sheet rekap: ' + ss.getUrl());
   Logger.log('Folder laporan: ' + f.getUrl());
+}
+
+// Buat (atau perbarui) laporan untuk SEMUA baris di "Rekap v3".
+// Jalankan dari editor: pilih "buatUlangLaporan", klik Run. Sekaligus memicu izin Docs/Drive.
+function buatUlangLaporan() {
+  const sh = siapkanSheet_(ambilSheet_());
+  const last = sh.getLastRow();
+  if (last < 2) { Logger.log('Belum ada kiriman di ' + SHEET_REKAP); return; }
+  const kolJson = HEADER.indexOf('Data lengkap (JSON)') + 1;
+  const kolUrl = HEADER.indexOf('Laporan') + 1;
+  const kolStatus = HEADER.indexOf('Status laporan') + 1;
+  const data = sh.getRange(2, kolJson, last - 1, 1).getValues();
+  data.forEach((r, i) => {
+    let url = '', status = 'OK';
+    try { url = buatLaporan_(JSON.parse(r[0])); } catch (err) { status = 'GAGAL: ' + (err && err.message || err); }
+    sh.getRange(i + 2, kolUrl).setValue(url);
+    sh.getRange(i + 2, kolStatus).setValue(status);
+    Logger.log('Baris ' + (i + 2) + ': ' + status + ' ' + url);
+  });
+  Logger.log('Folder laporan: ' + folderLaporan_().getUrl());
 }
 
 function json_(o) {
