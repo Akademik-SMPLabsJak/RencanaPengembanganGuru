@@ -5,400 +5,198 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Rencana Pengembangan Diri Guru</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap">
 <style>
 :root {
---bg: #eef1ee;
---paper: #ffffff;
---ink: #1b2420;
---muted: #5d6b64;
---line: #d5ddd8;
---accent: #1f6f54;
---accent-soft: #e2f0ea;
---warn: #9a5b00;
---warn-soft: #fff3df;
---danger: #b3261e;
---ok: #1f6f54;
---lead: #6a4c93;
---lead-soft: #f1ebf8;
---font: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --bg: #eef1ee; --paper: #ffffff; --ink: #1b2420; --muted: #5d6b64; --line: #d5ddd8;
+  --accent: #1f6f54; --accent-soft: #e2f0ea; --danger: #b3261e;
+  --font: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 @media (prefers-color-scheme: dark) { :root {
---bg: #121614; --paper: #1a201d; --ink: #e6ece8; --muted: #9aa8a1; --line: #2d3732;
---accent: #5cc49b; --accent-soft: #1d3029; --warn: #f0b45a; --warn-soft: #2e2516;
---danger: #ff8a80; --ok: #5cc49b; --lead: #c3a6ec; --lead-soft: #2a2335; color-scheme: dark } }
-
+  --bg: #121614; --paper: #1a201d; --ink: #e6ece8; --muted: #9aa8a1; --line: #2d3732;
+  --accent: #5cc49b; --accent-soft: #1d3029; --danger: #ff8a80; color-scheme: dark } }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.55;
-padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 48px; }
-.wrap { max-width: 860px; margin: 0 auto; display: grid; gap: 20px; }
-header.top { padding-top: 28px; display: grid; gap: 8px; }
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 40px; }
+.wrap { max-width: 760px; margin: 0 auto; display: grid; gap: 18px; }
+header { padding-top: 28px; display: grid; gap: 8px; }
 .eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); font-weight: 700; }
-h1 { font-size: clamp(24px, 4vw, 32px); line-height: 1.2; margin: 0; font-weight: 800; text-wrap: balance; }
+h1 { font-size: clamp(24px, 4vw, 30px); line-height: 1.2; margin: 0; font-weight: 800; text-wrap: balance; }
 .sub { color: var(--muted); margin: 0; max-width: 62ch; }
-.notice { background: var(--warn-soft); color: var(--ink); border: 1px solid color-mix(in srgb, var(--warn) 35%, transparent); border-radius: 10px; padding: 10px 14px; font-size: 14px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
-.notice b { color: var(--warn); }
-
-nav.steps { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 8px; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
-nav.steps a { flex: 0 0 auto; text-decoration: none; color: var(--muted); border: 1px solid var(--line); background: var(--paper); border-radius: 999px; padding: 6px 12px; font-size: 13px; font-weight: 600; white-space: nowrap; }
-nav.steps a .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--line); margin-right: 6px; vertical-align: middle; }
-nav.steps a.done .dot { background: var(--ok); }
-nav.steps a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
-
-section.card { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 22px clamp(16px, 3vw, 28px); display: grid; gap: 16px; scroll-margin-top: 64px; min-width: 0; }
-.sec-head { display: grid; gap: 4px; }
-.sec-head .tag { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
-h2 { font-size: 20px; margin: 0; line-height: 1.3; text-wrap: balance; }
+section { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 20px clamp(16px, 3vw, 26px); display: grid; gap: 14px; min-width: 0; }
+.tag { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+h2 { font-size: 19px; margin: 0; line-height: 1.3; }
 h3 { font-size: 15px; margin: 0; }
 .hint { color: var(--muted); font-size: 13.5px; margin: 0; }
-
-.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
 .field { display: grid; gap: 6px; min-width: 0; }
-.field > label, .field > .lbl { font-weight: 600; font-size: 14px; }
+.field > label, .lbl { font-weight: 600; font-size: 14px; }
 .req::after { content: " *"; color: var(--danger); }
-input[type=text], input[type=url], input[type=date], select, textarea {
-width: 100%; font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; }
-textarea { min-height: 84px; resize: vertical; }
-input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+input, select, textarea { width: 100%; font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; }
+textarea { min-height: 76px; resize: vertical; }
+input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 .invalid { border-color: var(--danger) !important; }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips { display: flex; border: 1px solid transparent; border-radius: 10px; flex-wrap: wrap; gap: 8px; }
 .chips label { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; font-size: 14px; cursor: pointer; }
-.chips input { accent-color: var(--accent); }
-
-.scale-legend { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; font-size: 12.5px; color: var(--muted); }
-.scale-legend span { border-top: 3px solid var(--line); padding-top: 4px; }
-.scale-legend span b { color: var(--ink); }
-.comp { display: grid; gap: 0; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
-.comp-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 10px 14px; background: var(--accent-soft); flex-wrap: wrap; }
-.comp-head .avg { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
-.item { display: grid; grid-template-columns: 28px 1fr auto; gap: 10px; align-items: center; padding: 10px 14px; border-top: 1px solid var(--line); }
-.item .no { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 13px; }
-.item .txt { min-width: 0; font-size: 14px; }
-.seg { display: inline-grid; grid-template-columns: repeat(4, 38px); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
-.seg input { position: absolute; opacity: 0; pointer-events: none; }
-.seg label { text-align: center; padding: 7px 0; cursor: pointer; font-weight: 700; font-variant-numeric: tabular-nums; border-left: 1px solid var(--line); }
+.chips input { width: auto; accent-color: var(--accent); }
+.item { border: 1px dashed var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 12px; }
+.item-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.seg { display: inline-grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; max-width: 260px; }
+.seg input { position: absolute; opacity: 0; width: 1px; }
+.seg label { text-align: center; padding: 7px 0; cursor: pointer; font-weight: 700; border-left: 1px solid var(--line); }
 .seg label:first-of-type { border-left: 0; }
 .seg input:checked + label { background: var(--accent); color: var(--paper); }
 .seg input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: -3px; }
-@media (max-width: 560px) { .item { grid-template-columns: 24px 1fr; } .seg { grid-column: 2; } }
-
-.repeat { border: 1px dashed var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 12px; }
-.repeat-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-button { font: inherit; cursor: pointer; border-radius: 8px; padding: 9px 14px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font-weight: 600; }
-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.legend { font-size: 12.5px; color: var(--muted); }
+button { font: inherit; cursor: pointer; border-radius: 8px; padding: 10px 16px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font-weight: 600; }
 button.primary { background: var(--accent); border-color: var(--accent); color: var(--paper); }
 button.link { border: 0; background: none; color: var(--danger); padding: 4px 6px; font-size: 13px; }
 button.add { justify-self: start; border-style: dashed; color: var(--accent); }
 button:disabled { opacity: .5; cursor: not-allowed; }
-
-.lead-box { background: var(--lead-soft); border-radius: 10px; padding: 14px; display: grid; gap: 10px; }
-.lead-box .who { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--lead); }
-
-.sem { border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 12px; }
-.act-row { display: grid; grid-template-columns: 1fr 170px; gap: 10px; align-items: start; }
-@media (max-width: 560px) { .act-row { grid-template-columns: 1fr; } }
-
-footer.bar { position: sticky; bottom: 0; background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)); display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
-.progress { display: grid; gap: 4px; min-width: 180px; flex: 1; }
-.progress .track { height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; }
-.progress .fill { height: 100%; background: var(--accent); width: 0; transition: width .3s; }
-.progress small { color: var(--muted); font-variant-numeric: tabular-nums; }
-.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.bar { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
 .msg { font-size: 14px; padding: 10px 14px; border-radius: 10px; }
 .msg.err { background: color-mix(in srgb, var(--danger) 12%, var(--paper)); color: var(--danger); }
-.msg.ok { background: var(--accent-soft); color: var(--ok); }
-.src { font-size: 12.5px; color: var(--muted); }
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
-html { scroll-behavior: smooth; }
+.msg.ok { background: var(--accent-soft); color: var(--accent); }
+.src { font-size: 12.5px; color: var(--muted); margin: 0; }
 </style>
 </head>
 <body>
-<div class="wrap">
-<header class="top">
+<form class="wrap" id="form" novalidate>
+<header>
 <div class="eyebrow">Labschool · Bagian Akademik</div>
 <h1>Rencana Pengembangan Diri Guru</h1>
-<p class="sub">Isi refleksi diri, tetapkan 1 sampai 3 tujuan, lalu susun rencana aksi untuk satu periode. Isian masuk ke rekap Bagian Akademik dan hanya dibaca oleh Anda, kepala sekolah, dan wakil kepala sekolah.</p>
-<div class="notice" id="previewNote"><span><b>Isian Anda</b> otomatis tersimpan di browser ini sampai dikirim.</span><button type="button" id="btnClear">Kosongkan form</button></div>
+<p class="sub">Pilih 1 sampai 3 butir kompetensi yang ingin Anda kembangkan berdasarkan hasil supervisi dan data lain, lalu tulis bentuk pengembangannya. Isian hanya dibaca oleh Anda, kepala sekolah, dan wakil kepala sekolah.</p>
 </header>
 
-<nav class="steps" id="steps" aria-label="Bagian form"></nav>
-
-<form id="form" novalidate>
-<div class="wrap">
-
-<section class="card" id="A">
-<div class="sec-head"><span class="tag">Bagian A</span><h2>Identitas guru</h2></div>
+<section>
+<span class="tag">Bagian 1</span><h2>Identitas guru</h2>
 <div class="grid2">
-<div class="field"><label class="req" for="nama">Nama lengkap</label><input type="text" id="nama" data-k="nama" data-req></div>
-<div class="field"><label for="nip">NIP / NUPTK</label><input type="text" id="nip" data-k="nip"></div>
-<div class="field"><label class="req" for="email">Email guru</label><input type="text" id="email" data-k="email" inputmode="email" data-req placeholder="nama@labschool.xyz"></div>
-<div class="field"><label class="req" for="status">Status kepegawaian</label>
-<select id="status" data-k="status" data-req><option value="">Pilih</option><option>PNS</option><option>PPPK</option><option>Honorer / GTY</option></select></div>
-<div class="field"><label class="req" for="mapel">Mata pelajaran / kelas yang diampu</label><input type="text" id="mapel" data-k="mapel" data-req></div>
-<div class="field"><label class="req" for="periode">Periode rencana</label>
-<select id="periode" data-k="periode" data-req><option value="">Pilih</option></select></div>
+<div class="field"><label class="req" for="nama">Nama lengkap</label><input id="nama" data-k="nama" required></div>
+<div class="field"><label for="nip">NIP / NUPTK</label><input id="nip" data-k="nip"></div>
+<div class="field"><label class="req" for="email">Email</label><input id="email" data-k="email" type="email" required placeholder="nama@labschool.xyz"></div>
+<div class="field"><label class="req" for="mapel">Mata pelajaran / kelas</label><input id="mapel" data-k="mapel" required></div>
+<div class="field"><label class="req" for="periode">Periode</label><select id="periode" data-k="periode" required><option value="">Pilih</option></select></div>
 </div>
 </section>
 
-<section class="card" id="B">
-<div class="sec-head"><span class="tag">Bagian B · Pra-perencanaan</span><h2>Refleksi diri</h2>
-<p class="hint">Nilai diri Anda pada 17 butir kompetensi guru. Pilih angka yang paling menggambarkan kebiasaan Anda saat ini.</p></div>
-<div class="scale-legend"><span><b>1</b> Belum terbiasa</span><span><b>2</b> Mulai menerapkan</span><span><b>3</b> Konsisten menerapkan</span><span><b>4</b> Bisa jadi contoh bagi rekan</span></div>
-<div id="refleksi" style="display:grid;gap:14px"></div>
-<div class="field"><label class="req" for="kekuatan">Apa dua kekuatan utama Anda saat ini?</label><textarea id="kekuatan" data-k="kekuatan" data-req></textarea></div>
-<div class="field"><label class="req" for="fokus">Butir mana yang paling ingin Anda kembangkan, dan mengapa?</label><textarea id="fokus" data-k="fokus" data-req></textarea></div>
-<div class="field"><span class="lbl">Data apa yang mendukung refleksi ini?</span><div class="chips" id="dataRef"></div></div>
-<p class="src">Butir kompetensi diringkas dari Pasal 8 Permendikdasmen No. 21 Tahun 2025.</p>
+<section>
+<span class="tag">Bagian 2</span><h2>Dasar refleksi</h2>
+<div class="field"><span class="lbl req">Data apa yang mendukung refleksi ini?</span><div class="chips" id="dataRef"></div></div>
+<div class="field"><label class="req" for="supervisi">Apa temuan utama dari data tersebut?</label><textarea id="supervisi" data-k="supervisi" required placeholder="Contoh: asesmen awal belum dipakai untuk menyesuaikan pembelajaran"></textarea></div>
 </section>
 
-<section class="card" id="C">
-<div class="sec-head"><span class="tag">Bagian C · Perencanaan</span><h2>Tujuan pengembangan</h2>
-<p class="hint">Tulis 1 sampai 3 tujuan. Setiap tujuan mengacu pada satu butir refleksi dan punya ukuran yang bisa dicek.</p></div>
-<div id="tujuan" style="display:grid;gap:12px"></div>
-<button type="button" class="add" id="addTujuan">+ Tambah tujuan</button>
+<section>
+<span class="tag">Bagian 3</span><h2>Pengembangan diri yang Anda inginkan</h2>
+<p class="hint">Pilih butir kompetensi dari 17 butir, lalu tulis pengembangan yang ingin Anda lakukan.</p>
+<div id="items" style="display:grid;gap:12px"></div>
+<button type="button" class="add" id="add">+ Tambah butir</button>
+<p class="src">17 butir diringkas dari Pasal 8 Permendikdasmen No. 21 Tahun 2025.</p>
 </section>
 
-<section class="card" id="D">
-<div class="sec-head"><span class="tag">Bagian D · Perencanaan</span><h2>Rencana aksi</h2>
-<p class="hint">Kegiatan yang akan Anda lakukan untuk mencapai tujuan. Satu tujuan boleh punya beberapa kegiatan.</p></div>
-<div id="aksi" style="display:grid;gap:12px"></div>
-<button type="button" class="add" id="addAksi">+ Tambah kegiatan</button>
-</section>
-
-<section class="card" id="E">
-<div class="sec-head"><span class="tag">Bagian E · Perencanaan</span><h2>Kebutuhan dukungan sekolah</h2></div>
-<div class="field"><span class="lbl">Jenis dukungan yang dibutuhkan</span><div class="chips" id="dukungan"></div></div>
-<div class="field"><label for="dukunganKet">Penjelasan kebutuhan</label><textarea id="dukunganKet" data-k="dukunganKet"></textarea></div>
-<div class="lead-box"><span class="who">Tanggapan pimpinan</span><p class="hint">Kepala sekolah atau wakil meninjau rencana ini di rekap Bagian Akademik, lalu menyampaikan keputusan (disetujui atau perlu revisi) beserta komentarnya.</p></div>
-</section>
-
-<section class="card" id="F">
-<div class="sec-head"><span class="tag">Bagian F · Pelaksanaan dan pemantauan</span><h2>Catatan progres per semester</h2>
-<p class="hint">Isi di akhir tiap semester, lalu kirim ulang form ini.</p></div>
-<div id="progres" style="display:grid;gap:12px"></div>
-</section>
-
-<section class="card" id="G">
-<div class="sec-head"><span class="tag">Bagian G · Penilaian dan tindak lanjut</span><h2>Penilaian akhir</h2>
-<p class="hint">Isi di akhir periode.</p></div>
-<div id="akhir" style="display:grid;gap:12px"></div>
-<div class="field"><label for="pelajaran">Pelajaran utama dan rencana periode berikutnya</label><textarea id="pelajaran" data-k="pelajaran"></textarea></div>
-<div class="lead-box"><span class="who">Tanggapan pimpinan</span><p class="hint">Kepala sekolah atau wakil memberi komentar dan rekomendasi tindak lanjut setelah meninjau isian ini.</p></div>
+<section>
+<span class="tag">Bagian 4</span><h2>Dukungan sekolah</h2>
+<div class="field"><span class="lbl">Dukungan yang Anda butuhkan</span><div class="chips" id="dukungan"></div></div>
+<div class="field"><label for="dukunganKet">Penjelasan</label><textarea id="dukunganKet" data-k="dukunganKet"></textarea></div>
 </section>
 
 <div id="msg" role="status" aria-live="polite"></div>
-
-<footer class="bar">
-<div class="progress"><div class="track"><div class="fill" id="fill"></div></div><small id="progTxt">0 dari 0 isian wajib</small></div>
-<div class="actions">
-<button type="button" id="btnDraft">Simpan draf</button>
-<button type="submit" class="primary" id="btnSend">Kirim ke Akademik</button>
-</div>
-</footer>
-</div>
+<div class="bar"><button type="submit" class="primary" id="send">Kirim ke Akademik</button></div>
 </form>
-</div>
 
 <script>
-// ---- Konfigurasi ----
-// Isian dikirim ke Google Apps Script milik akun Akademik, yang menyimpannya ke Google Sheet.
 const FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbwOs_7rPcuGD8jVwksgGORMyPCBfWnDXywQeM_58qlLCN7tHmN0aGOdRGN2y3-jE7_Mtg/exec";
-const DRAFT_KEY = "rpdg-draf-v1";
-
-const KOMPETENSI = [
-{ nama: "Pedagogik", butir: [
-"Merancang dan memfasilitasi pengalaman belajar yang mendorong pemahaman konseptual",
-"Melaksanakan pembelajaran yang responsif terhadap keragaman latar belakang, kebutuhan, dan potensi murid",
-"Menciptakan pembelajaran yang berkesadaran, bermakna, dan menggembirakan",
-"Mengintegrasikan TIK secara kritis dan kreatif dalam pembelajaran",
-"Menerapkan strategi pembelajaran atau pembimbingan sesuai karakteristik murid",
-"Melaksanakan asesmen untuk mengetahui kebutuhan belajar, memberi umpan balik, dan mengukur capaian" ]},
-{ nama: "Kepribadian", butir: [
-"Menampilkan perilaku etis dan keteladanan",
-"Melakukan refleksi diri berkesinambungan, berpola pikir bertumbuh, dan belajar sepanjang hayat",
-"Konsisten mengambil keputusan dan bertindak untuk mengembangkan potensi dan budaya belajar murid" ]},
-{ nama: "Sosial", butir: [
-"Berkomunikasi secara inklusif, empatik, dan efektif",
-"Berkolaborasi dengan murid, rekan pendidik, tenaga kependidikan, orang tua/wali, dan masyarakat",
-"Berpartisipasi aktif dalam organisasi profesi dan komunitas belajar" ]},
-{ nama: "Profesional", butir: [
-"Menguasai tujuan pendidikan pada satuan pendidikan yang diampu",
-"Menguasai disiplin ilmu sesuai materi pembelajaran atau pembimbingan",
-"Memahami potensi dan kebutuhan belajar murid berdasarkan karakteristik materi",
-"Memahami, menerapkan, dan mengembangkan kurikulum secara adaptif dan kontekstual",
-"Mengembangkan praktik profesional secara konseptual, empiris, kreatif, dan inovatif" ]}
-];
-const BUTIR = []; KOMPETENSI.forEach(k => k.butir.forEach(t => BUTIR.push({ no: BUTIR.length + 1, komp: k.nama, teks: t })));
-const DATA_REF = ["Rapor Pendidikan", "Hasil observasi kelas", "Umpan balik murid", "Hasil belajar murid", "Lainnya"];
+const DRAFT_KEY = "rpdg-draf-v2";
+const KOMPETENSI = {
+  Pedagogik: [
+    "Merancang dan memfasilitasi pengalaman belajar yang mendorong pemahaman konseptual",
+    "Melaksanakan pembelajaran yang responsif terhadap keragaman latar belakang, kebutuhan, dan potensi murid",
+    "Menciptakan pembelajaran yang berkesadaran, bermakna, dan menggembirakan",
+    "Mengintegrasikan TIK secara kritis dan kreatif dalam pembelajaran",
+    "Menerapkan strategi pembelajaran atau pembimbingan sesuai karakteristik murid",
+    "Melaksanakan asesmen untuk mengetahui kebutuhan belajar, memberi umpan balik, dan mengukur capaian"],
+  Kepribadian: [
+    "Menampilkan perilaku etis dan keteladanan",
+    "Melakukan refleksi diri berkesinambungan, berpola pikir bertumbuh, dan belajar sepanjang hayat",
+    "Konsisten mengambil keputusan dan bertindak untuk mengembangkan potensi dan budaya belajar murid"],
+  Sosial: [
+    "Berkomunikasi secara inklusif, empatik, dan efektif",
+    "Berkolaborasi dengan murid, rekan pendidik, tenaga kependidikan, orang tua/wali, dan masyarakat",
+    "Berpartisipasi aktif dalam organisasi profesi dan komunitas belajar"],
+  Profesional: [
+    "Menguasai tujuan pendidikan pada satuan pendidikan yang diampu",
+    "Menguasai disiplin ilmu sesuai materi pembelajaran atau pembimbingan",
+    "Memahami potensi dan kebutuhan belajar murid berdasarkan karakteristik materi",
+    "Memahami, menerapkan, dan mengembangkan kurikulum secara adaptif dan kontekstual",
+    "Mengembangkan praktik profesional secara konseptual, empiris, kreatif, dan inovatif"]
+};
+const BUTIR = []; for (const [k, list] of Object.entries(KOMPETENSI)) list.forEach(t => BUTIR.push({ no: BUTIR.length + 1, komp: k, teks: t }));
+const BENTUK = ["Pelatihan / kursus", "Komunitas belajar", "Observasi sejawat", "Belajar mandiri", "Lainnya"];
+const DATA_REF = ["Supervisi", "Rapor Pendidikan", "Hasil observasi kelas", "Umpan balik murid", "Hasil belajar murid", "Lainnya"];
 const DUKUNGAN = ["Waktu / jadwal", "Biaya", "Mentor atau rekan observasi", "Sarana / TIK", "Izin kegiatan", "Lainnya"];
-const JENIS = ["Pelatihan / kursus", "Komunitas belajar", "Observasi sejawat", "Belajar mandiri", "Lainnya"];
-const STATUS = ["Belum mulai", "Berjalan", "Selesai", "Batal"];
-const CAPAI = ["Tercapai", "Sebagian", "Belum tercapai"];
+const SKALA = ["Belum terbiasa", "Mulai menerapkan", "Konsisten menerapkan", "Bisa jadi contoh bagi rekan"];
 
-function periodeOpsi() {
-const now = new Date(); const y = now.getMonth() >= 6 ? now.getFullYear() : now.getFullYear() - 1;
-const out = [];
-for (const ty of [y, y + 1]) {
-const t = ty + "/" + (ty + 1);
-out.push("Tahun ajaran " + t, "Semester ganjil " + t, "Semester genap " + t);
-}
-return out;
-}
-function semesterList(p) {
-if (!p) return [];
-if (p.startsWith("Tahun ajaran")) { const t = p.replace("Tahun ajaran ", ""); return ["Semester ganjil " + t, "Semester genap " + t]; }
-return [p];
-}
-
-function kosong() {
-return { nama: "", nip: "", email: "", status: "", mapel: "", periode: "", skor: {}, kekuatan: "", fokus: "", dataRef: [],
-tujuan: [{ butir: "", rumusan: "", ukuran: "", target: "", tenggat: "" }], aksi: [{ tujuan: 0, jenis: "", nama: "", mulai: "", selesai: "", bukti: "" }],
-dukungan: [], dukunganKet: "", progres: {}, akhir: {}, pelajaran: "" };
-}
-
-const isGAS = typeof google !== "undefined" && google.script && google.script.run;
-const LIVE = isGAS || !!FORM_ENDPOINT;
-let S;
-try { const d = localStorage.getItem(DRAFT_KEY); S = d ? JSON.parse(d) : kosong(); } catch (e) { S = kosong(); }
-
+const baru = () => ({ butir: "", skor: "", bentuk: "", pengembangan: "", target: "", waktu: "" });
+const kosong = () => ({ nama: "", nip: "", email: "", mapel: "", periode: "", dataRef: [], supervisi: "", items: [baru()], dukungan: [], dukunganKet: "" });
+let S; try { S = JSON.parse(localStorage.getItem(DRAFT_KEY)) || kosong(); } catch (e) { S = kosong(); }
 const $ = s => document.querySelector(s);
-const el = (tag, attrs = {}, kids = []) => { const e = document.createElement(tag);
-for (const [k, v] of Object.entries(attrs)) { if (k === "text") e.textContent = v; else if (k.startsWith("on")) e.addEventListener(k.slice(2), v); else if (v !== false && v != null) e.setAttribute(k, v === true ? "" : v); }
-[].concat(kids).forEach(c => c && e.append(c)); return e; };
-const opt = (v, label, sel) => el("option", { value: v, text: label ?? v, selected: String(sel) === String(v) || false });
+const h = (tag, attrs = {}, kids = []) => { const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) { if (k === "text") e.textContent = v; else if (k.startsWith("on")) e.addEventListener(k.slice(2), v); else if (v !== false && v != null) e.setAttribute(k, v === true ? "" : v); }
+  [].concat(kids).forEach(c => c && e.append(c)); return e; };
+const opt = (v, t, sel) => h("option", { value: v, text: t ?? v, selected: String(sel) === String(v) });
+let t0; const simpan = () => { clearTimeout(t0); t0 = setTimeout(() => { try { localStorage.setItem(DRAFT_KEY, JSON.stringify(S)); } catch (e) {} }, 500); };
 
-function bindSimple() {
-const per = $("#periode"); periodeOpsi().forEach(p => per.append(opt(p)));
-if (S.periode && !periodeOpsi().includes(S.periode)) per.append(opt(S.periode));
-document.querySelectorAll("[data-k]").forEach(i => { i.value = S[i.dataset.k] ?? "";
-i.addEventListener("input", () => { S[i.dataset.k] = i.value; if (i.id === "periode") renderProgres(); changed(); }); });
-chips("#dataRef", DATA_REF, "dataRef"); chips("#dukungan", DUKUNGAN, "dukungan");
+function periode() { const n = new Date(), y = n.getMonth() >= 6 ? n.getFullYear() : n.getFullYear() - 1, out = [];
+  for (const a of [y, y + 1]) { const t = a + "/" + (a + 1); out.push("Tahun ajaran " + t, "Semester ganjil " + t, "Semester genap " + t); } return out; }
+
+function renderItems() { const box = $("#items"); box.replaceChildren();
+  S.items.forEach((it, i) => {
+    const bind = (key, node) => { node.id = key + i; node.value = it[key] ?? ""; node.required = true;
+      node.addEventListener(node.tagName === "SELECT" ? "change" : "input", () => { it[key] = node.value; simpan(); }); return node; };
+    const field = (label, node) => h("div", { class: "field" }, [h("label", { class: "req", for: node.id, text: label }), node]);
+    const sel = h("select", {}, [opt("", "Pilih butir")]);
+    for (const k of Object.keys(KOMPETENSI)) sel.append(h("optgroup", { label: "Kompetensi " + k }, BUTIR.filter(b => b.komp === k).map(b => opt(b.no, b.no + ". " + b.teks, it.butir))));
+    const seg = h("div", { class: "seg", role: "radiogroup", "aria-label": "Skor diri saat ini" });
+    [1, 2, 3, 4].forEach(n => { const id = "skor" + i + "_" + n; const r = h("input", { type: "radio", name: "skor" + i, id, value: n, checked: String(it.skor) === String(n) });
+      r.addEventListener("change", () => { it.skor = n; seg.classList.remove("invalid"); leg.textContent = SKALA[n - 1]; simpan(); });
+      seg.append(r, h("label", { for: id, text: n, title: SKALA[n - 1] })); });
+    const leg = h("span", { class: "legend", text: it.skor ? SKALA[it.skor - 1] : "1 belum terbiasa · 4 bisa jadi contoh bagi rekan" });
+    box.append(h("div", { class: "item" }, [
+      h("div", { class: "item-head" }, [h("h3", { text: "Butir pilihan " + (i + 1) }), S.items.length > 1 ? h("button", { type: "button", class: "link", text: "Hapus", onclick: () => { S.items.splice(i, 1); renderItems(); simpan(); } }) : null]),
+      field("Butir kompetensi", bind("butir", sel)),
+      h("div", { class: "field" }, [h("span", { class: "lbl req", text: "Skor diri saat ini" }), seg, leg]),
+      field("Bentuk pengembangan", bind("bentuk", h("select", {}, [opt("", "Pilih"), ...BENTUK.map(b => opt(b, b, it.bentuk))]))),
+      field("Pengembangan apa yang Anda inginkan?", bind("pengembangan", h("textarea", { placeholder: "Contoh: ikut kombel IPA tentang asesmen awal, lalu menerapkannya di kelas 8" }))),
+      h("div", { class: "grid2" }, [
+        field("Target (apa yang berubah di kelas)", bind("target", h("input", { placeholder: "Contoh: asesmen awal di setiap bab" }))),
+        field("Waktu pelaksanaan", bind("waktu", h("input", { type: "month" }))) ]) ])); });
+  $("#add").disabled = S.items.length >= 3; }
+
+function init() {
+  const p = $("#periode"); periode().forEach(x => p.append(opt(x))); if (S.periode && !periode().includes(S.periode)) p.append(opt(S.periode));
+  document.querySelectorAll("[data-k]").forEach(i => { i.value = S[i.dataset.k] ?? ""; i.addEventListener("input", () => { S[i.dataset.k] = i.value; simpan(); }); });
+  chips("#dukungan", DUKUNGAN, "dukungan", "d"); chips("#dataRef", DATA_REF, "dataRef", "r");
+  renderItems();
 }
-function chips(sel, list, key) { const box = $(sel); box.replaceChildren();
-list.forEach((t, i) => { const id = key + i; const cb = el("input", { type: "checkbox", id, checked: S[key].includes(t) });
-cb.addEventListener("change", () => { S[key] = cb.checked ? [...S[key], t] : S[key].filter(x => x !== t); changed(); });
-box.append(el("label", { for: id }, [cb, t])); }); }
+function chips(sel, list, key, pre) { const box = $(sel); S[key] = S[key] || [];
+  list.forEach((t, i) => { const cb = h("input", { type: "checkbox", id: pre + i, checked: S[key].includes(t) });
+    cb.addEventListener("change", () => { S[key] = cb.checked ? [...S[key], t] : S[key].filter(x => x !== t); box.classList.remove("invalid"); simpan(); }); box.append(h("label", { for: pre + i }, [cb, t])); }); }
+function msg(t, k) { $("#msg").replaceChildren(t ? h("div", { class: "msg " + k, text: t }) : ""); }
 
-function renderRefleksi() { const box = $("#refleksi"); box.replaceChildren();
-KOMPETENSI.forEach(k => { const items = BUTIR.filter(b => b.komp === k.nama);
-const avg = el("span", { class: "avg" });
-const comp = el("div", { class: "comp" }, [el("div", { class: "comp-head" }, [el("h3", { text: "Kompetensi " + k.nama }), avg])]);
-const upd = () => { const v = items.map(b => S.skor[b.no]).filter(Boolean); avg.textContent = v.length ? "Rata-rata " + (v.reduce((a, b) => a + b, 0) / v.length).toFixed(1) + " · " + v.length + "/" + items.length + " dinilai" : "0/" + items.length + " dinilai"; };
-items.forEach(b => { const seg = el("div", { class: "seg", role: "radiogroup", "aria-label": "Skor butir " + b.no });
-[1, 2, 3, 4].forEach(n => { const id = "s" + b.no + "_" + n; const r = el("input", { type: "radio", name: "s" + b.no, id, value: n, checked: S.skor[b.no] === n });
-r.addEventListener("change", () => { S.skor[b.no] = n; upd(); renderTujuan(true); changed(); });
-seg.append(r, el("label", { for: id, text: n, title: ["Belum terbiasa", "Mulai menerapkan", "Konsisten menerapkan", "Bisa jadi contoh"][n - 1] })); });
-comp.append(el("div", { class: "item", "data-butir": b.no }, [el("span", { class: "no", text: b.no + "." }), el("span", { class: "txt", text: b.teks }), seg])); });
-upd(); box.append(comp); }); }
-
-function renderTujuan(keepFocus) { if (keepFocus && document.activeElement && $("#tujuan").contains(document.activeElement)) return;
-const box = $("#tujuan"); box.replaceChildren();
-S.tujuan.forEach((t, i) => {
-const sel = el("select", { id: "tb" + i, "data-req": true }, [opt("", "Pilih butir")]);
-BUTIR.forEach(b => sel.append(opt(b.no, b.no + ". " + b.teks + (S.skor[b.no] ? " (skor " + S.skor[b.no] + ")" : ""), t.butir)));
-sel.addEventListener("change", () => { t.butir = sel.value ? +sel.value : ""; renderAksi(); renderAkhir(); changed(); });
-const f = (key, label, node) => { node.id = node.id || "t" + key + i; node.value = t[key] ?? ""; if (!node.dataset.bound) node.addEventListener("input", () => { t[key] = node.value; if (key === "rumusan") { renderAksi(); renderAkhir(); } changed(); });
-return el("div", { class: "field" }, [el("label", { for: node.id, class: "req", text: label }), node]); };
-const target = el("select", { "data-req": true }, [opt("", "Pilih"), ...[1, 2, 3, 4].map(n => opt(n, String(n), t.target))]);
-box.append(el("div", { class: "repeat" }, [
-el("div", { class: "repeat-head" }, [el("h3", { text: "Tujuan " + (i + 1) }), S.tujuan.length > 1 ? el("button", { type: "button", class: "link", text: "Hapus", onclick: () => { S.tujuan.splice(i, 1); S.aksi.forEach(a => { if (a.tujuan == i) a.tujuan = 0; else if (a.tujuan > i) a.tujuan--; }); renderAll(); } }) : null]),
-el("div", { class: "field" }, [el("label", { for: "tb" + i, class: "req", text: "Butir kompetensi yang dituju" }), sel]),
-f("rumusan", "Rumusan tujuan", el("textarea", { "data-req": true })),
-f("ukuran", "Ukuran keberhasilan (apa yang berubah di kelas dan bagaimana diukur)", el("textarea", { "data-req": true })),
-el("div", { class: "grid2" }, [f("target", "Target skor akhir periode", target), f("tenggat", "Tenggat", el("input", { type: "date", "data-req": true }))]) ])); });
-$("#addTujuan").disabled = S.tujuan.length >= 3; }
-
-function tujuanLabel(i) { const t = S.tujuan[i]; if (!t) return ""; return "Tujuan " + (i + 1) + (t.rumusan ? ": " + t.rumusan.slice(0, 60) + (t.rumusan.length > 60 ? "…" : "") : ""); }
-
-function renderAksi() { const box = $("#aksi"); box.replaceChildren();
-S.aksi.forEach((a, i) => {
-const bind = (key, node, req = true) => { node.id = "a" + key + i; node.value = a[key] ?? ""; node.addEventListener(node.tagName === "SELECT" ? "change" : "input", () => { a[key] = key === "tujuan" ? +node.value : node.value; if (key === "nama" || key === "tujuan") renderProgres(); changed(); }); if (req) node.dataset.req = ""; return node; };
-const field = (label, node, req = true) => el("div", { class: "field" }, [el("label", { for: node.id, class: req ? "req" : null, text: label }), node]);
-const tSel = bind("tujuan", el("select", {}, S.tujuan.map((_, j) => opt(j, tujuanLabel(j), a.tujuan))));
-const jSel = bind("jenis", el("select", {}, [opt("", "Pilih"), ...JENIS.map(j => opt(j, j, a.jenis))]));
-box.append(el("div", { class: "repeat" }, [
-el("div", { class: "repeat-head" }, [el("h3", { text: "Kegiatan " + (i + 1) }), S.aksi.length > 1 ? el("button", { type: "button", class: "link", text: "Hapus", onclick: () => { S.aksi.splice(i, 1); renderAll(); } }) : null]),
-el("div", { class: "grid2" }, [field("Tujuan terkait", tSel), field("Jenis kegiatan", jSel)]),
-field("Nama atau deskripsi kegiatan", bind("nama", el("input", { type: "text" }))),
-el("div", { class: "grid2" }, [field("Mulai", bind("mulai", el("input", { type: "date" }))), field("Selesai", bind("selesai", el("input", { type: "date" })))]),
-field("Bukti yang akan dikumpulkan", bind("bukti", el("input", { type: "text", placeholder: "Sertifikat, catatan observasi, modul ajar" }), false), false) ])); }); }
-
-function renderProgres() { const box = $("#progres"); box.replaceChildren();
-const sems = semesterList(S.periode);
-if (!sems.length) { box.append(el("p", { class: "hint", text: "Pilih periode rencana di Bagian A untuk menampilkan semester." })); return; }
-sems.forEach((sm, si) => { const P = S.progres[sm] = S.progres[sm] || { kegiatan: {}, bukti: "" };
-const rows = S.aksi.map((a, i) => { const k = P.kegiatan[i] = P.kegiatan[i] || { status: "", catatan: "" };
-const st = el("select", { id: "ps" + si + "_" + i, "aria-label": "Status kegiatan " + (i + 1) }, [opt("", "Status"), ...STATUS.map(s => opt(s, s, k.status))]);
-st.addEventListener("change", () => { k.status = st.value; changed(); });
-const ct = el("textarea", { id: "pc" + si + "_" + i, placeholder: "Apa yang dilakukan dan apa yang berubah di kelas", "aria-label": "Catatan kegiatan " + (i + 1) }); ct.value = k.catatan; ct.addEventListener("input", () => { k.catatan = ct.value; changed(); });
-return el("div", { class: "field" }, [el("span", { class: "lbl", text: "Kegiatan " + (i + 1) + (a.nama ? ": " + a.nama : "") }), el("div", { class: "act-row" }, [ct, st])]); });
-const bk = el("input", { type: "url", id: "pb" + si, placeholder: "https://drive.google.com/…" }); bk.value = P.bukti; bk.addEventListener("input", () => { P.bukti = bk.value; changed(); });
-box.append(el("div", { class: "sem" }, [el("h3", { text: sm }), ...rows,
-el("div", { class: "field" }, [el("label", { for: "pb" + si, text: "Tautan bukti (folder Google Drive atau lainnya)" }), bk]),
-el("div", { class: "lead-box" }, [el("span", { class: "who", text: "Tanggapan pimpinan" }), el("p", { class: "hint", text: "Umpan balik dan saran pembinaan disampaikan pimpinan setelah meninjau catatan semester ini." })]) ])); }); }
-
-function renderAkhir() { const box = $("#akhir"); box.replaceChildren();
-S.tujuan.forEach((t, i) => { const A = S.akhir[i] = S.akhir[i] || { skor: "", capai: "" };
-const sk = el("select", { id: "gs" + i }, [opt("", "Pilih"), ...[1, 2, 3, 4].map(n => opt(n, String(n), A.skor))]); sk.addEventListener("change", () => { A.skor = sk.value; changed(); });
-const cp = el("select", { id: "gc" + i }, [opt("", "Pilih"), ...CAPAI.map(c => opt(c, c, A.capai))]); cp.addEventListener("change", () => { A.capai = cp.value; changed(); });
-const b = BUTIR.find(x => x.no == t.butir);
-box.append(el("div", { class: "repeat" }, [el("h3", { text: tujuanLabel(i) || "Tujuan " + (i + 1) }),
-b ? el("p", { class: "hint", text: "Butir " + b.no + ". Skor awal " + (S.skor[b.no] || "-") + ", target " + (t.target || "-") + "." }) : null,
-el("div", { class: "grid2" }, [el("div", { class: "field" }, [el("label", { for: "gs" + i, text: "Skor refleksi ulang" }), sk]), el("div", { class: "field" }, [el("label", { for: "gc" + i, text: "Ketercapaian tujuan" }), cp])]) ])); }); }
-
-function renderSteps() { const nav = $("#steps"); nav.replaceChildren();
-[["A", "Identitas"], ["B", "Refleksi"], ["C", "Tujuan"], ["D", "Rencana aksi"], ["E", "Dukungan"], ["F", "Progres"], ["G", "Penilaian akhir"]].forEach(([id, t]) => {
-const sec = document.getElementById(id); const reqs = [...sec.querySelectorAll("[data-req]")];
-let done = reqs.every(i => String(i.value).trim()); if (id === "B") done = done && BUTIR.every(b => S.skor[b.no]);
-if (id === "F" || id === "G" || id === "E") done = false;
-nav.append(el("a", { href: "#" + id, class: done ? "done" : null }, [el("span", { class: "dot" }), id + ". " + t])); }); }
-
-function hitung() { const reqs = [...document.querySelectorAll("#form [data-req]")]; const filled = reqs.filter(i => String(i.value).trim()).length;
-const sk = BUTIR.filter(b => S.skor[b.no]).length; return { total: reqs.length + BUTIR.length, filled: filled + sk, reqs }; }
-
-let saveT;
-function changed() { const h = hitung(); $("#fill").style.width = (h.total ? h.filled / h.total * 100 : 0) + "%";
-$("#progTxt").textContent = h.filled + " dari " + h.total + " isian wajib terisi"; renderSteps();
-clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(DRAFT_KEY, JSON.stringify(S)); } catch (e) {} }, 600); }
-
-function renderAll() { renderRefleksi(); renderTujuan(); renderAksi(); renderProgres(); renderAkhir(); changed(); }
-
-function msg(text, kind) { const m = $("#msg"); m.replaceChildren(); if (text) m.append(el("div", { class: "msg " + kind, text })); }
-
-function validasi() { document.querySelectorAll(".invalid").forEach(e => e.classList.remove("invalid"));
-const { reqs } = hitung(); const bad = reqs.filter(i => !String(i.value).trim()); bad.forEach(i => i.classList.add("invalid"));
-const belum = BUTIR.filter(b => !S.skor[b.no]); belum.forEach(b => document.querySelector('[data-butir="' + b.no + '"] .seg').classList.add("invalid"));
-if (S.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(S.email)) { $("#email").classList.add("invalid"); bad.push($("#email")); }
-const first = document.querySelector(".invalid"); if (first) first.scrollIntoView({ block: "center" });
-return { ok: !bad.length && !belum.length, n: bad.length + belum.length }; }
-
-function ringkasan() { return { ...S, butir: BUTIR.map(b => ({ no: b.no, kompetensi: b.komp, teks: b.teks, skor: S.skor[b.no] || null })), dikirim: new Date().toISOString() }; }
-
-$("#form").addEventListener("submit", ev => { ev.preventDefault(); const v = validasi();
-if (!v.ok) { msg(v.n + " isian wajib belum lengkap. Isian yang ditandai merah perlu diisi dulu.", "err"); return; }
-if (!LIVE) { msg("Isian sudah lengkap. Ini masih pratinjau, jadi belum ada yang dikirim ke Bagian Akademik.", "ok"); return; }
-const btn = $("#btnSend"); btn.disabled = true; btn.textContent = "Mengirim…";
-const done = () => { btn.disabled = false; btn.textContent = "Kirim ke Akademik"; };
-const ok = () => { done(); msg("Terkirim ke Bagian Akademik. Terima kasih.", "ok"); };
-const fail = e => { done(); msg("Gagal mengirim: " + (e && e.message ? e.message : "coba lagi beberapa saat") + ". Isian Anda tetap tersimpan di halaman ini.", "err"); };
-if (isGAS) google.script.run.withSuccessHandler(ok).withFailureHandler(fail).kirim(ringkasan());
-else fetch(FORM_ENDPOINT, { method: "POST", body: JSON.stringify(ringkasan()) })
-.then(r => r.json()).then(j => j && j.ok ? ok() : fail(new Error(j && j.error || "server menolak"))).catch(fail); });
-
-$("#btnDraft").addEventListener("click", () => { try { localStorage.setItem(DRAFT_KEY, JSON.stringify(S)); msg("Draf tersimpan di browser ini. Buka halaman ini lagi di perangkat yang sama untuk melanjutkan.", "ok"); } catch (e) { msg("Draf tidak bisa disimpan di browser ini. Jangan tutup halaman sebelum mengirim.", "err"); } });
-
-let armed = false;
-$("#btnClear").addEventListener("click", ev => { const b = ev.currentTarget;
-if (!armed) { armed = true; b.textContent = "Yakin? Klik lagi untuk mengosongkan"; setTimeout(() => { armed = false; b.textContent = "Kosongkan form"; }, 4000); return; }
-armed = false; S = kosong(); try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
-document.querySelectorAll("[data-k]").forEach(i => i.value = ""); chips("#dataRef", DATA_REF, "dataRef"); chips("#dukungan", DUKUNGAN, "dukungan");
-b.textContent = "Kosongkan form"; renderAll(); msg("", ""); window.scrollTo(0, 0); });
-
-$("#addTujuan").addEventListener("click", () => { if (S.tujuan.length < 3) { S.tujuan.push({ butir: "", rumusan: "", ukuran: "", target: "", tenggat: "" }); renderAll(); } });
-$("#addAksi").addEventListener("click", () => { S.aksi.push({ tujuan: 0, jenis: "", nama: "", mulai: "", selesai: "", bukti: "" }); renderAll(); });
-
-bindSimple(); renderAll();
+$("#add").addEventListener("click", () => { if (S.items.length < 3) { S.items.push(baru()); renderItems(); simpan(); } });
+$("#form").addEventListener("submit", ev => { ev.preventDefault();
+  document.querySelectorAll(".invalid").forEach(e => e.classList.remove("invalid"));
+  const bad = [...document.querySelectorAll("#form [required]")].filter(i => !i.checkValidity()); bad.forEach(i => i.classList.add("invalid"));
+  if (!S.dataRef.length) { $("#dataRef").classList.add("invalid"); bad.unshift($("#dataRef")); }
+  S.items.forEach((it, i) => { if (!it.skor) { const s = document.querySelectorAll(".seg")[i]; s.classList.add("invalid"); bad.push(s); } });
+  const pilih = S.items.map(it => it.butir).filter(Boolean); if (new Set(pilih).size < pilih.length) { msg("Butir yang sama dipilih lebih dari sekali. Pilih butir yang berbeda.", "err"); return; }
+  if (bad.length) { bad[0].scrollIntoView({ block: "center" }); msg(bad.length + " isian wajib belum lengkap. Isian yang ditandai merah perlu diisi.", "err"); return; }
+  const data = { ...S, items: S.items.map(it => { const b = BUTIR.find(x => x.no == it.butir); return { ...it, kompetensi: b.komp, teks: b.teks }; }), dikirim: new Date().toISOString() };
+  const btn = $("#send"); btn.disabled = true; btn.textContent = "Mengirim…";
+  const selesai = (t, k) => { btn.disabled = false; btn.textContent = "Kirim ke Akademik"; msg(t, k); };
+  fetch(FORM_ENDPOINT, { method: "POST", body: JSON.stringify(data) }).then(r => r.json())
+    .then(j => j && j.ok ? selesai("Terkirim ke Bagian Akademik. Terima kasih.", "ok") : selesai("Gagal mengirim: " + ((j && j.error) || "server menolak") + ". Isian Anda masih tersimpan di halaman ini.", "err"))
+    .catch(() => selesai("Gagal mengirim. Periksa koneksi lalu coba lagi. Isian Anda masih tersimpan di halaman ini.", "err")); });
+init();
 </script>
 </body>
 </html>
