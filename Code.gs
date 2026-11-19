@@ -23,7 +23,11 @@ function doGet() {
 
 function doPost(e) {
   try {
-    simpan_(JSON.parse(e.postData.contents));
+    const d = JSON.parse(e.postData.contents);
+    // Halaman rekap.html memakai aksi 'rekap' dan 'status'; selain itu kiriman form guru.
+    if (d.aksi === 'rekap') return json_(Object.assign({ ok: true }, ambilRekap(d.pin)));
+    if (d.aksi === 'status') return json_(Object.assign({ ok: true }, simpanStatus(d.pin, d.email, d.status, d.catatan)));
+    simpan_(d);
     return json_({ ok: true });
   } catch (err) {
     return json_({ ok: false, error: String(err && err.message || err) });
@@ -178,6 +182,115 @@ function buatUlangLaporan() {
     Logger.log('Baris ' + (i + 2) + ': ' + status + ' ' + url);
   });
   Logger.log('Folder laporan: ' + folderLaporan_().getUrl());
+}
+
+// ================= REKAP UNTUK KEPALA SEKOLAH & WAKASEK =================
+// Halaman rekap.html (GitHub Pages) memanggil doPost dengan aksi 'rekap' dan 'status'.
+// PIN TIDAK ditulis di kode (repo publik). Atur di Project Settings > Script Properties:
+// nama PIN_REKAP, nilai = PIN yang diinginkan.
+const SHEET_STATUS = 'Status Persetujuan';
+
+function cekPin_(pin) {
+  const benar = PropertiesService.getScriptProperties().getProperty('PIN_REKAP');
+  if (!benar) throw new Error('PIN rekap belum diatur (Script Property PIN_REKAP)');
+  if (String(pin || '').trim() !== benar) throw new Error('PIN salah');
+}
+
+function sheetStatus_(ss) {
+  let sh = ss.getSheetByName(SHEET_STATUS);
+  if (!sh) {
+    sh = ss.insertSheet(SHEET_STATUS);
+    sh.appendRow(['Email', 'Status', 'Catatan', 'Waktu']);
+    sh.setFrozenRows(1);
+    sh.getRange(1, 1, 1, 4).setFontWeight('bold');
+  }
+  return sh;
+}
+
+function pisah_(s) {
+  return String(s || '').split(',').map(x => x.trim()).filter(String);
+}
+
+// Satu baris per guru (kiriman terakhir), plus status persetujuan terakhir.
+function ambilRekap(pin) {
+  cekPin_(pin);
+  const ss = ambilSheet_();
+  const sh = siapkanSheet_(ss);
+  const baris = sh.getDataRange().getValues().slice(1);
+  const perGuru = {};
+  baris.forEach(r => {
+    const email = String(r[2] || '').toLowerCase().trim();
+    if (!email) return;
+    let d = {};
+    try { d = JSON.parse(r[12] || '{}'); } catch (e) {}
+    const waktu = r[0] instanceof Date ? r[0].getTime() : 0;
+    const lama = perGuru[email];
+    const jumlah = (lama ? lama.jumlahKirim : 0) + 1;
+    if (lama && lama.waktu > waktu) { lama.jumlahKirim = jumlah; return; }
+    const butir = d.butir || [];
+    perGuru[email] = {
+      email: email,
+      nama: String(r[1] || ''),
+      mapel: String(r[3] || ''),
+      waktu: waktu,
+      jumlahKirim: jumlah,
+      temuan: String(r[5] || ''),
+      butir: butir.map(b => b.no + '. ' + b.teks),
+      kompetensi: butir.length ? Array.from(new Set(butir.map(b => String(b.kompetensi)))) : pisah_(r[7]),
+      bentuk: d.bentuk || pisah_(r[8]),
+      dukungan: d.dukungan || pisah_(r[9]),
+      dukunganKet: String(r[10] || ''),
+      laporan: String(r[11] || ''),
+      status: 'Menunggu',
+      catatan: '',
+      diperbarui: false,
+    };
+  });
+  // Kalau guru mengirim ulang setelah ditinjau, status kembali "Menunggu".
+  sheetStatus_(ss).getDataRange().getValues().slice(1).forEach(r => {
+    const g = perGuru[String(r[0] || '').toLowerCase().trim()];
+    if (!g) return;
+    const t = r[3] instanceof Date ? r[3].getTime() : 0;
+    if (t >= g.waktu) { g.status = String(r[1]); g.catatan = String(r[2] || ''); g.diperbarui = false; }
+    else { g.status = 'Menunggu'; g.catatan = ''; g.diperbarui = true; }
+  });
+  const guru = Object.keys(perGuru).map(k => perGuru[k]).sort((a, b) => a.nama.localeCompare(b.nama));
+  return {
+    guru: guru,
+    sheetUrl: ss.getUrl(),
+    dibuat: Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'd MMMM yyyy, HH:mm'),
+  };
+}
+
+function simpanStatus(pin, email, status, catatan) {
+  cekPin_(pin);
+  if (['Disetujui', 'Perlu revisi'].indexOf(status) < 0) throw new Error('Status tidak dikenal');
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    sheetStatus_(ambilSheet_()).appendRow([String(email).toLowerCase().trim(), status, catatan || '', new Date()]);
+  } finally {
+    lock.releaseLock();
+  }
+  try {
+    tulisStatusKeDoc_(email, status, catatan);
+  } catch (err) {
+    return { peringatan: 'Status tersimpan, tetapi laporan Docs gagal diperbarui: ' + err.message };
+  }
+  return {};
+}
+
+// Mencentang kotak persetujuan dan mengisi komentar di laporan Docs guru.
+function tulisStatusKeDoc_(email, status, catatan) {
+  const id = PropertiesService.getScriptProperties().getProperty('DOC_' + String(email).toLowerCase().trim());
+  if (!id) return;
+  const body = DocumentApp.openById(id).getBody();
+  const baris = status === 'Disetujui'
+    ? 'Persetujuan: ☑ Disetujui   ☐ Perlu revisi'
+    : 'Persetujuan: ☐ Disetujui   ☑ Perlu revisi';
+  body.replaceText('Persetujuan:.*', baris);
+  const aman = String(catatan || '').replace(/[\\$]/g, '\\$&');
+  body.replaceText('Komentar:.*', 'Komentar: ' + aman);
 }
 
 function json_(o) {
