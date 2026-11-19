@@ -16,6 +16,9 @@
   --bg: #121614; --paper: #1a201d; --ink: #e6ece8; --muted: #9aa8a1; --line: #2d3732;
   --accent: #5cc49b; --accent-soft: #1d3029; --danger: #ff8a80; color-scheme: dark } }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
+.sukses h2 { color: var(--accent); }
+.sukses p { margin: 8px 0; }
 body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.55;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 40px; }
 .wrap { max-width: 760px; margin: 0 auto; display: grid; gap: 18px; }
@@ -113,6 +116,20 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 <div class="bar"><button type="submit" class="primary" id="send">Kirim ke Akademik</button></div>
 </form>
 
+<div class="wrap" id="terkirim" hidden>
+<header>
+<div class="eyebrow">Labschool · Bagian Akademik</div>
+<h1>Rencana Pengembangan Diri Guru</h1>
+</header>
+<section class="sukses">
+<span class="tag">Terkirim</span>
+<h2>✓ Isian Anda sudah diterima Bagian Akademik</h2>
+<p>Terima kasih, <b id="tkNama"></b>. Rencana pengembangan diri Anda tersimpan pada <span id="tkWaktu"></span>.</p>
+<p class="sub">Kepala sekolah dan wakil kepala sekolah akan meninjau rencana ini. Anda tidak perlu mengirim lagi. Jika ingin mengubah isian, klik tombol di bawah lalu kirim ulang; kiriman terbaru menggantikan yang lama.</p>
+<div class="bar"><button type="button" id="ubahIsian">Ubah isian</button></div>
+</section>
+</div>
+
 <script>
 const FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbwOs_7rPcuGD8jVwksgGORMyPCBfWnDXywQeM_58qlLCN7tHmN0aGOdRGN2y3-jE7_Mtg/exec";
 const DRAFT_KEY = "rpdg-draf-v3";
@@ -183,8 +200,14 @@ $("#form").addEventListener("submit", ev => { ev.preventDefault();
   const btn = $("#send"); btn.disabled = true; btn.textContent = "Mengirim…";
   const selesai = (t, k) => { btn.disabled = false; btn.textContent = "Kirim ke Akademik"; msg(t, k); };
   fetch(FORM_ENDPOINT, { method: "POST", body: JSON.stringify(data) }).then(r => r.json())
-    .then(j => j && j.ok ? selesai("Terkirim ke Bagian Akademik. Terima kasih.", "ok") : selesai("Gagal mengirim: " + ((j && j.error) || "server menolak") + ". Isian Anda masih tersimpan di halaman ini.", "err"))
+    .then(j => j && j.ok ? (selesai("Terkirim ke Bagian Akademik. Terima kasih.", "ok"), tampilTerkirim()) : selesai("Gagal mengirim: " + ((j && j.error) || "server menolak") + ". Isian Anda masih tersimpan di halaman ini.", "err"))
     .catch(() => selesai("Gagal mengirim. Periksa koneksi lalu coba lagi. Isian Anda masih tersimpan di halaman ini.", "err")); });
+function tampilTerkirim() {
+  $("#tkNama").textContent = $("#nama").value.trim();
+  $("#tkWaktu").textContent = new Date().toLocaleString("id-ID", { dateStyle: "long", timeStyle: "short" });
+  $("#form").hidden = true; $("#terkirim").hidden = false; window.scrollTo(0, 0);
+}
+$("#ubahIsian").addEventListener("click", () => { $("#terkirim").hidden = true; $("#form").hidden = false; $("#msg").replaceChildren(); window.scrollTo(0, 0); });
 init();
 </script>
 </body>
