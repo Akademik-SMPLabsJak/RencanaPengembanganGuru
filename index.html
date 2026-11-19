@@ -72,7 +72,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 <header>
 <div class="eyebrow">Labschool · Bagian Akademik</div>
 <h1>Rencana Pengembangan Diri Guru</h1>
-<p class="sub">Pilih 1 sampai 3 butir kompetensi yang ingin Anda kembangkan berdasarkan hasil supervisi dan data lain, lalu pilih bentuk pengembangannya. Isian hanya dibaca oleh Anda, kepala sekolah, dan wakil kepala sekolah.</p>
+<p class="sub">Pilih butir kompetensi yang ingin Anda kembangkan berdasarkan hasil supervisi dan data lain, lalu pilih bentuk pengembangannya. Isian hanya dibaca oleh Anda, kepala sekolah, dan wakil kepala sekolah.</p>
 </header>
 
 <section>
@@ -93,7 +93,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 
 <section>
 <span class="tag">Bagian 3</span><h2>Kompetensi yang ingin dikembangkan</h2>
-<p class="hint">Centang 1 sampai 3 butir. <span id="hitung"></span></p>
+<p class="hint">Centang butir yang ingin Anda kembangkan.</p>
 <div id="butir" class="list"></div>
 <p class="src">17 butir diringkas dari Pasal 8 Permendikdasmen No. 21 Tahun 2025.</p>
 </section>
@@ -141,9 +141,8 @@ const KOMPETENSI = {
 };
 const BUTIR = []; for (const [k, list] of Object.entries(KOMPETENSI)) list.forEach(t => BUTIR.push({ no: BUTIR.length + 1, komp: k, teks: t }));
 const BENTUK = ["Pelatihan / workshop", "Komunitas belajar", "Observasi / kunjungan sejawat", "Mentoring / coaching", "Belajar mandiri (daring)", "Studi lanjut"];
-const DATA_REF = ["Supervisi", "Rapor Pendidikan", "Hasil observasi kelas", "Umpan balik murid", "Hasil belajar murid", "Lainnya"];
-const DUKUNGAN = ["Waktu / jadwal", "Biaya", "Mentor atau rekan observasi", "Sarana / TIK", "Izin kegiatan", "Lainnya"];
-const MAKS = 3;
+const DATA_REF = ["Supervisi", "Rapor Pendidikan", "Hasil observasi kelas", "EGOM", "Hasil belajar murid", "Lainnya"];
+const DUKUNGAN = ["Waktu / jadwal", "Biaya", "Mentor atau rekan observasi", "Sarana / TIK", "Izin kegiatan", "Narasumber/ahli", "Lainnya"];
 
 const kosong = () => ({ nama: "", email: "", mapel: "", dataRef: [], dataLain: "", supervisi: "", butir: [], bentuk: [], dukungan: [], dukunganKet: "" });
 let S; try { S = Object.assign(kosong(), JSON.parse(localStorage.getItem(DRAFT_KEY)) || {}); } catch (e) { S = kosong(); }
@@ -163,11 +162,10 @@ function renderButir() { const box = $("#butir"); box.replaceChildren();
   for (const k of Object.keys(KOMPETENSI)) {
     const grup = h("div", {}, [h("h3", { text: "Kompetensi " + k })]);
     BUTIR.filter(b => b.komp === k).forEach(b => { const on = S.butir.includes(b.no);
-      const cb = h("input", { type: "checkbox", id: "b" + b.no, checked: on, disabled: !on && S.butir.length >= MAKS });
+      const cb = h("input", { type: "checkbox", id: "b" + b.no, checked: on });
       cb.addEventListener("change", () => { S.butir = cb.checked ? [...S.butir, b.no] : S.butir.filter(x => x !== b.no); box.classList.remove("invalid"); simpan(); renderButir(); });
       grup.append(h("label", { class: "opt", for: "b" + b.no }, [cb, h("span", { text: b.no + ". " + b.teks })])); });
     box.append(grup); }
-  $("#hitung").textContent = S.butir.length + " dari " + MAKS + " dipilih.";
 }
 
 function init() {
