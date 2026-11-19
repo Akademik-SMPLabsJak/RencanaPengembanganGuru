@@ -39,6 +39,13 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-
 .chips { display: flex; border: 1px solid transparent; border-radius: 10px; flex-wrap: wrap; gap: 8px; }
 .chips label { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; font-size: 14px; cursor: pointer; }
 .chips input { width: auto; accent-color: var(--accent); }
+.list { display: grid; gap: 14px; }
+.list h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 6px; }
+.opt { display: grid; grid-template-columns: 22px 1fr; gap: 8px; align-items: start; padding: 9px 10px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; margin-top: 6px; }
+.opt input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--accent); }
+.opt:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.opt:has(input:disabled) { opacity: .55; cursor: not-allowed; }
+.list.invalid, .chips.invalid { border: 1px solid var(--danger); border-radius: 10px; padding: 6px; }
 .item { border: 1px dashed var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 12px; }
 .item-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 .seg { display: inline-grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; max-width: 260px; }
@@ -65,17 +72,15 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 <header>
 <div class="eyebrow">Labschool · Bagian Akademik</div>
 <h1>Rencana Pengembangan Diri Guru</h1>
-<p class="sub">Pilih 1 sampai 3 butir kompetensi yang ingin Anda kembangkan berdasarkan hasil supervisi dan data lain, lalu tulis bentuk pengembangannya. Isian hanya dibaca oleh Anda, kepala sekolah, dan wakil kepala sekolah.</p>
+<p class="sub">Pilih 1 sampai 3 butir kompetensi yang ingin Anda kembangkan berdasarkan hasil supervisi dan data lain, lalu pilih bentuk pengembangannya. Isian hanya dibaca oleh Anda, kepala sekolah, dan wakil kepala sekolah.</p>
 </header>
 
 <section>
 <span class="tag">Bagian 1</span><h2>Identitas guru</h2>
 <div class="grid2">
 <div class="field"><label class="req" for="nama">Nama lengkap</label><input id="nama" data-k="nama" required></div>
-<div class="field"><label for="nip">NIP / NUPTK</label><input id="nip" data-k="nip"></div>
 <div class="field"><label class="req" for="email">Email</label><input id="email" data-k="email" type="email" required placeholder="nama@labschool.xyz"></div>
 <div class="field"><label class="req" for="mapel">Mata pelajaran / kelas</label><input id="mapel" data-k="mapel" required></div>
-<div class="field"><label class="req" for="periode">Periode</label><select id="periode" data-k="periode" required><option value="">Pilih</option></select></div>
 </div>
 </section>
 
@@ -86,17 +91,21 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 </section>
 
 <section>
-<span class="tag">Bagian 3</span><h2>Pengembangan diri yang Anda inginkan</h2>
-<p class="hint">Pilih butir kompetensi dari 17 butir, lalu tulis pengembangan yang ingin Anda lakukan.</p>
-<div id="items" style="display:grid;gap:12px"></div>
-<button type="button" class="add" id="add">+ Tambah butir</button>
+<span class="tag">Bagian 3</span><h2>Kompetensi yang ingin dikembangkan</h2>
+<p class="hint">Centang 1 sampai 3 butir. <span id="hitung"></span></p>
+<div id="butir" class="list"></div>
 <p class="src">17 butir diringkas dari Pasal 8 Permendikdasmen No. 21 Tahun 2025.</p>
 </section>
 
 <section>
-<span class="tag">Bagian 4</span><h2>Dukungan sekolah</h2>
+<span class="tag">Bagian 4</span><h2>Bentuk pengembangan yang diinginkan</h2>
+<div class="field"><span class="lbl req">Pilih satu atau lebih</span><div class="chips" id="bentuk"></div></div>
+</section>
+
+<section>
+<span class="tag">Bagian 5</span><h2>Dukungan sekolah</h2>
 <div class="field"><span class="lbl">Dukungan yang Anda butuhkan</span><div class="chips" id="dukungan"></div></div>
-<div class="field"><label for="dukunganKet">Penjelasan</label><textarea id="dukunganKet" data-k="dukunganKet"></textarea></div>
+<div class="field"><label for="dukunganKet">Penjelasan (opsional)</label><textarea id="dukunganKet" data-k="dukunganKet"></textarea></div>
 </section>
 
 <div id="msg" role="status" aria-live="polite"></div>
@@ -105,7 +114,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 
 <script>
 const FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbwOs_7rPcuGD8jVwksgGORMyPCBfWnDXywQeM_58qlLCN7tHmN0aGOdRGN2y3-jE7_Mtg/exec";
-const DRAFT_KEY = "rpdg-draf-v2";
+const DRAFT_KEY = "rpdg-draf-v3";
 const KOMPETENSI = {
   Pedagogik: [
     "Merancang dan memfasilitasi pengalaman belajar yang mendorong pemahaman konseptual",
@@ -130,67 +139,47 @@ const KOMPETENSI = {
     "Mengembangkan praktik profesional secara konseptual, empiris, kreatif, dan inovatif"]
 };
 const BUTIR = []; for (const [k, list] of Object.entries(KOMPETENSI)) list.forEach(t => BUTIR.push({ no: BUTIR.length + 1, komp: k, teks: t }));
-const BENTUK = ["Pelatihan / kursus", "Komunitas belajar", "Observasi sejawat", "Belajar mandiri", "Lainnya"];
+const BENTUK = ["Pelatihan / workshop", "Komunitas belajar", "Observasi / kunjungan sejawat", "Mentoring / coaching", "Belajar mandiri (daring)", "Studi lanjut"];
 const DATA_REF = ["Supervisi", "Rapor Pendidikan", "Hasil observasi kelas", "Umpan balik murid", "Hasil belajar murid", "Lainnya"];
 const DUKUNGAN = ["Waktu / jadwal", "Biaya", "Mentor atau rekan observasi", "Sarana / TIK", "Izin kegiatan", "Lainnya"];
-const SKALA = ["Belum terbiasa", "Mulai menerapkan", "Konsisten menerapkan", "Bisa jadi contoh bagi rekan"];
+const MAKS = 3;
 
-const baru = () => ({ butir: "", skor: "", bentuk: "", pengembangan: "", target: "", waktu: "" });
-const kosong = () => ({ nama: "", nip: "", email: "", mapel: "", periode: "", dataRef: [], supervisi: "", items: [baru()], dukungan: [], dukunganKet: "" });
-let S; try { S = JSON.parse(localStorage.getItem(DRAFT_KEY)) || kosong(); } catch (e) { S = kosong(); }
+const kosong = () => ({ nama: "", email: "", mapel: "", dataRef: [], supervisi: "", butir: [], bentuk: [], dukungan: [], dukunganKet: "" });
+let S; try { S = Object.assign(kosong(), JSON.parse(localStorage.getItem(DRAFT_KEY)) || {}); } catch (e) { S = kosong(); }
 const $ = s => document.querySelector(s);
 const h = (tag, attrs = {}, kids = []) => { const e = document.createElement(tag);
-  for (const [k, v] of Object.entries(attrs)) { if (k === "text") e.textContent = v; else if (k.startsWith("on")) e.addEventListener(k.slice(2), v); else if (v !== false && v != null) e.setAttribute(k, v === true ? "" : v); }
+  for (const [k, v] of Object.entries(attrs)) { if (k === "text") e.textContent = v; else if (v !== false && v != null) e.setAttribute(k, v === true ? "" : v); }
   [].concat(kids).forEach(c => c && e.append(c)); return e; };
-const opt = (v, t, sel) => h("option", { value: v, text: t ?? v, selected: String(sel) === String(v) });
-let t0; const simpan = () => { clearTimeout(t0); t0 = setTimeout(() => { try { localStorage.setItem(DRAFT_KEY, JSON.stringify(S)); } catch (e) {} }, 500); };
+let t0; const simpan = () => { clearTimeout(t0); t0 = setTimeout(() => { try { localStorage.setItem(DRAFT_KEY, JSON.stringify(S)); } catch (e) {} }, 400); };
 
-function periode() { const n = new Date(), y = n.getMonth() >= 6 ? n.getFullYear() : n.getFullYear() - 1, out = [];
-  for (const a of [y, y + 1]) { const t = a + "/" + (a + 1); out.push("Tahun ajaran " + t, "Semester ganjil " + t, "Semester genap " + t); } return out; }
+function chips(sel, list, key, pre) { const box = $(sel);
+  list.forEach((t, i) => { const cb = h("input", { type: "checkbox", id: pre + i, checked: S[key].includes(t) });
+    cb.addEventListener("change", () => { S[key] = cb.checked ? [...S[key], t] : S[key].filter(x => x !== t); box.classList.remove("invalid"); simpan(); });
+    box.append(h("label", { for: pre + i }, [cb, t])); }); }
 
-function renderItems() { const box = $("#items"); box.replaceChildren();
-  S.items.forEach((it, i) => {
-    const bind = (key, node) => { node.id = key + i; node.value = it[key] ?? ""; node.required = true;
-      node.addEventListener(node.tagName === "SELECT" ? "change" : "input", () => { it[key] = node.value; simpan(); }); return node; };
-    const field = (label, node) => h("div", { class: "field" }, [h("label", { class: "req", for: node.id, text: label }), node]);
-    const sel = h("select", {}, [opt("", "Pilih butir")]);
-    for (const k of Object.keys(KOMPETENSI)) sel.append(h("optgroup", { label: "Kompetensi " + k }, BUTIR.filter(b => b.komp === k).map(b => opt(b.no, b.no + ". " + b.teks, it.butir))));
-    const seg = h("div", { class: "seg", role: "radiogroup", "aria-label": "Skor diri saat ini" });
-    [1, 2, 3, 4].forEach(n => { const id = "skor" + i + "_" + n; const r = h("input", { type: "radio", name: "skor" + i, id, value: n, checked: String(it.skor) === String(n) });
-      r.addEventListener("change", () => { it.skor = n; seg.classList.remove("invalid"); leg.textContent = SKALA[n - 1]; simpan(); });
-      seg.append(r, h("label", { for: id, text: n, title: SKALA[n - 1] })); });
-    const leg = h("span", { class: "legend", text: it.skor ? SKALA[it.skor - 1] : "1 belum terbiasa · 4 bisa jadi contoh bagi rekan" });
-    box.append(h("div", { class: "item" }, [
-      h("div", { class: "item-head" }, [h("h3", { text: "Butir pilihan " + (i + 1) }), S.items.length > 1 ? h("button", { type: "button", class: "link", text: "Hapus", onclick: () => { S.items.splice(i, 1); renderItems(); simpan(); } }) : null]),
-      field("Butir kompetensi", bind("butir", sel)),
-      h("div", { class: "field" }, [h("span", { class: "lbl req", text: "Skor diri saat ini" }), seg, leg]),
-      field("Bentuk pengembangan", bind("bentuk", h("select", {}, [opt("", "Pilih"), ...BENTUK.map(b => opt(b, b, it.bentuk))]))),
-      field("Pengembangan apa yang Anda inginkan?", bind("pengembangan", h("textarea", { placeholder: "Contoh: ikut kombel IPA tentang asesmen awal, lalu menerapkannya di kelas 8" }))),
-      h("div", { class: "grid2" }, [
-        field("Target (apa yang berubah di kelas)", bind("target", h("input", { placeholder: "Contoh: asesmen awal di setiap bab" }))),
-        field("Waktu pelaksanaan", bind("waktu", h("input", { type: "month" }))) ]) ])); });
-  $("#add").disabled = S.items.length >= 3; }
+function renderButir() { const box = $("#butir"); box.replaceChildren();
+  for (const k of Object.keys(KOMPETENSI)) {
+    const grup = h("div", {}, [h("h3", { text: "Kompetensi " + k })]);
+    BUTIR.filter(b => b.komp === k).forEach(b => { const on = S.butir.includes(b.no);
+      const cb = h("input", { type: "checkbox", id: "b" + b.no, checked: on, disabled: !on && S.butir.length >= MAKS });
+      cb.addEventListener("change", () => { S.butir = cb.checked ? [...S.butir, b.no] : S.butir.filter(x => x !== b.no); box.classList.remove("invalid"); simpan(); renderButir(); });
+      grup.append(h("label", { class: "opt", for: "b" + b.no }, [cb, h("span", { text: b.no + ". " + b.teks })])); });
+    box.append(grup); }
+  $("#hitung").textContent = S.butir.length + " dari " + MAKS + " dipilih.";
+}
 
 function init() {
-  const p = $("#periode"); periode().forEach(x => p.append(opt(x))); if (S.periode && !periode().includes(S.periode)) p.append(opt(S.periode));
   document.querySelectorAll("[data-k]").forEach(i => { i.value = S[i.dataset.k] ?? ""; i.addEventListener("input", () => { S[i.dataset.k] = i.value; simpan(); }); });
-  chips("#dukungan", DUKUNGAN, "dukungan", "d"); chips("#dataRef", DATA_REF, "dataRef", "r");
-  renderItems();
-}
-function chips(sel, list, key, pre) { const box = $(sel); S[key] = S[key] || [];
-  list.forEach((t, i) => { const cb = h("input", { type: "checkbox", id: pre + i, checked: S[key].includes(t) });
-    cb.addEventListener("change", () => { S[key] = cb.checked ? [...S[key], t] : S[key].filter(x => x !== t); box.classList.remove("invalid"); simpan(); }); box.append(h("label", { for: pre + i }, [cb, t])); }); }
+  chips("#dataRef", DATA_REF, "dataRef", "r"); chips("#bentuk", BENTUK, "bentuk", "f"); chips("#dukungan", DUKUNGAN, "dukungan", "d");
+  renderButir(); }
 function msg(t, k) { $("#msg").replaceChildren(t ? h("div", { class: "msg " + k, text: t }) : ""); }
 
-$("#add").addEventListener("click", () => { if (S.items.length < 3) { S.items.push(baru()); renderItems(); simpan(); } });
 $("#form").addEventListener("submit", ev => { ev.preventDefault();
   document.querySelectorAll(".invalid").forEach(e => e.classList.remove("invalid"));
   const bad = [...document.querySelectorAll("#form [required]")].filter(i => !i.checkValidity()); bad.forEach(i => i.classList.add("invalid"));
-  if (!S.dataRef.length) { $("#dataRef").classList.add("invalid"); bad.unshift($("#dataRef")); }
-  S.items.forEach((it, i) => { if (!it.skor) { const s = document.querySelectorAll(".seg")[i]; s.classList.add("invalid"); bad.push(s); } });
-  const pilih = S.items.map(it => it.butir).filter(Boolean); if (new Set(pilih).size < pilih.length) { msg("Butir yang sama dipilih lebih dari sekali. Pilih butir yang berbeda.", "err"); return; }
-  if (bad.length) { bad[0].scrollIntoView({ block: "center" }); msg(bad.length + " isian wajib belum lengkap. Isian yang ditandai merah perlu diisi.", "err"); return; }
-  const data = { ...S, items: S.items.map(it => { const b = BUTIR.find(x => x.no == it.butir); return { ...it, kompetensi: b.komp, teks: b.teks }; }), dikirim: new Date().toISOString() };
+  for (const [key, sel] of [["dataRef", "#dataRef"], ["butir", "#butir"], ["bentuk", "#bentuk"]]) if (!S[key].length) { $(sel).classList.add("invalid"); bad.push($(sel)); }
+  if (bad.length) { bad.sort((a, b) => a.compareDocumentPosition(b) & 2 ? 1 : -1)[0].scrollIntoView({ block: "center" }); msg(bad.length + " isian wajib belum lengkap. Isian yang ditandai merah perlu diisi.", "err"); return; }
+  const data = { ...S, butir: S.butir.slice().sort((a, b) => a - b).map(n => { const b = BUTIR[n - 1]; return { no: b.no, kompetensi: b.komp, teks: b.teks }; }), dikirim: new Date().toISOString() };
   const btn = $("#send"); btn.disabled = true; btn.textContent = "Mengirim…";
   const selesai = (t, k) => { btn.disabled = false; btn.textContent = "Kirim ke Akademik"; msg(t, k); };
   fetch(FORM_ENDPOINT, { method: "POST", body: JSON.stringify(data) }).then(r => r.json())
