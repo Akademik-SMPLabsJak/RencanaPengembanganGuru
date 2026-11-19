@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Rekap Rencana Pengembangan Diri Guru</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #eef1ee; --paper: #ffffff; --ink: #1b2420; --muted: #5d6b64; --line: #d5ddd8;
+  --accent: #1f6f54; --accent-soft: #e2f0ea; --danger: #b3261e; --danger-soft: #fbe9e7;
+  --wait-soft: #f1f3f2;
+  --font: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root {
+  --bg: #121614; --paper: #1a201d; --ink: #e6ece8; --muted: #9aa8a1; --line: #2d3732;
+  --accent: #5cc49b; --accent-soft: #1d3029; --danger: #ff8a80; --danger-soft: #3a1f1d;
+  --wait-soft: #232a26; color-scheme: dark } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.55;
+  padding: 0 16px 40px; }
+.wrap { max-width: 1100px; margin: 0 auto; display: grid; gap: 18px; }
+header { padding-top: 28px; }
+.eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+h1 { font-size: 28px; font-weight: 800; margin: 4px 0 6px; letter-spacing: -.01em; }
+.sub { color: var(--muted); margin: 0; font-size: 14px; }
+.card { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; }
+.card h2 { font-size: 15px; margin: 0 0 12px; }
+.muted { color: var(--muted); font-size: 13px; }
+input, select, textarea, button { font: inherit; color: inherit; }
+input, select, textarea { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; }
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: var(--accent); }
+textarea { width: 100%; min-height: 64px; resize: vertical; }
+button { border: 1px solid var(--line); background: var(--paper); border-radius: 10px; padding: 8px 14px; cursor: pointer; font-weight: 600; }
+button:hover { border-color: var(--accent); }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+button.danger { color: var(--danger); }
+button:disabled { opacity: .6; cursor: default; }
+a { color: var(--accent); font-weight: 600; }
+
+#layarPin { max-width: 380px; margin: 60px auto 0; }
+#layarPin input { width: 100%; margin: 10px 0 12px; }
+#pesanPin { margin-left: 8px; }
+
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.stat { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+.stat b { display: block; font-size: 26px; font-weight: 800; line-height: 1.2; }
+.stat span { color: var(--muted); font-size: 13px; }
+.stat.ok b { color: var(--accent); } .stat.rev b { color: var(--danger); }
+
+.dua { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.bar { display: grid; grid-template-columns: 1fr 120px 28px; gap: 10px; align-items: center; margin: 6px 0; font-size: 13px; }
+.trk { background: var(--wait-soft); height: 8px; border-radius: 99px; overflow: hidden; }
+.isi { background: var(--accent); height: 100%; border-radius: 99px; }
+.n { text-align: right; font-weight: 700; }
+
+.alat { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.alat input { flex: 1; min-width: 220px; }
+
+.tabel { overflow-x: auto; padding: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { padding: 10px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); font-weight: 700; }
+tr:last-child td { border-bottom: 0; }
+.kecil { color: var(--muted); font-size: 12px; }
+.st { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 99px; white-space: nowrap; }
+.st.ok { background: var(--accent-soft); color: var(--accent); }
+.st.rev { background: var(--danger-soft); color: var(--danger); }
+.st.tunggu { background: var(--wait-soft); color: var(--muted); }
+.aksi { white-space: nowrap; }
+.aksi a { margin-right: 8px; }
+.det td { background: var(--bg); }
+.det ul { margin: 4px 0 10px 18px; padding: 0; }
+.det .tombol { margin-top: 8px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+@media (max-width: 760px) { .stats { grid-template-columns: 1fr 1fr; } .dua { grid-template-columns: 1fr; } h1 { font-size: 22px; } }
+@media print {
+  body { background: #fff; color: #000; padding: 0; }
+  .noprint { display: none !important; }
+  .card, .stat { border-color: #bbb; }
+  .det td { background: #fff; }
+}
+</style>
+</head>
+<body>
+
+<div id="layarPin" class="card">
+  <div class="eyebrow">Labschool · Bagian Akademik</div>
+  <h1 style="font-size:22px">Rekap Pengembangan Diri Guru</h1>
+  <p class="sub">Halaman ini untuk kepala sekolah dan wakil kepala sekolah. Masukkan PIN untuk membuka rekap.</p>
+  <input id="pin" type="password" autocomplete="current-password" placeholder="PIN">
+  <button class="primary" id="btnMasuk">Buka rekap</button><span id="pesanPin" class="kecil"></span>
+</div>
+
+<div id="layarRekap" class="wrap" hidden>
+  <header>
+    <div class="eyebrow">Labschool · Bagian Akademik</div>
+    <h1>Rekap Rencana Pengembangan Diri Guru</h1>
+    <p class="sub">SMP Labschool Jakarta · dimuat <span id="dimuat"></span></p>
+  </header>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="dua">
+    <div class="card"><h2>Kompetensi yang paling banyak dipilih</h2><div id="topKomp"></div></div>
+    <div class="card"><h2>Bentuk pengembangan yang paling banyak diminta</h2><div id="topBentuk"></div></div>
+  </div>
+
+  <div class="alat noprint">
+    <input id="cari" placeholder="Cari nama, mapel, kompetensi…">
+    <select id="fStatus">
+      <option value="">Semua status</option>
+      <option>Menunggu</option><option>Disetujui</option><option>Perlu revisi</option>
+    </select>
+    <button id="btnMuat">Muat ulang</button>
+    <button id="btnCetak">Cetak / PDF</button>
+    <a id="lnkSheet" href="#" target="_blank" rel="noopener">Buka Sheet</a>
+  </div>
+
+  <div class="card tabel">
+    <table>
+      <thead><tr><th>No</th><th>Nama</th><th>Mapel/kelas</th><th>Kompetensi</th><th>Bentuk pengembangan</th><th>Status</th><th class="noprint">Aksi</th></tr></thead>
+      <tbody id="isiTabel"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+// Sama dengan FORM_ENDPOINT di index.html.
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbwOs_7rPcuGD8jVwksgGORMyPCBfWnDXywQeM_58qlLCN7tHmN0aGOdRGN2y3-jE7_Mtg/exec";
+
+let PIN = "", DATA = null, buka = {};
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+function kirim(data) {
+  return fetch(ENDPOINT, { method: "POST", body: JSON.stringify(data) })
+    .then((r) => r.json())
+    .then((j) => { if (!j || !j.ok) throw new Error((j && j.error) || "server menolak"); return j; });
+}
+
+function masuk() {
+  PIN = $("#pin").value.trim();
+  if (!PIN) return;
+  $("#btnMasuk").disabled = true;
+  $("#pesanPin").textContent = "Memuat…";
+  muat().finally(() => { $("#btnMasuk").disabled = false; });
+}
+
+function muat() {
+  return kirim({ aksi: "rekap", pin: PIN })
+    .then((d) => {
+      DATA = d; buka = {};
+      $("#pesanPin").textContent = "";
+      $("#layarPin").hidden = true;
+      $("#layarRekap").hidden = false;
+      tampil();
+    })
+    .catch((e) => {
+      const pesan = String(e.message || e).replace(/^Error:\s*/, "");
+      if (!$("#layarRekap").hidden) alert("Gagal memuat: " + pesan);
+      else $("#pesanPin").textContent = pesan === "Failed to fetch" ? "Gagal terhubung. Periksa koneksi." : pesan;
+    });
+}
+
+function hitung(list, kunci) {
+  const m = {};
+  list.forEach((g) => (g[kunci] || []).forEach((x) => { m[x] = (m[x] || 0) + 1; }));
+  return Object.keys(m).map((k) => [k, m[k]]).sort((a, b) => b[1] - a[1]);
+}
+
+function daftarBatang(arr, total) {
+  if (!arr.length) return '<p class="muted">Belum ada data.</p>';
+  return arr.slice(0, 8).map(([k, n]) =>
+    '<div class="bar"><div>' + esc(k) + '</div><div class="trk"><div class="isi" style="width:' +
+    Math.round(n / total * 100) + '%"></div></div><div class="n">' + n + '</div></div>').join("");
+}
+
+function lencana(g) {
+  const c = g.status === "Disetujui" ? "ok" : g.status === "Perlu revisi" ? "rev" : "tunggu";
+  return '<span class="st ' + c + '">' + esc(g.status) + '</span>' +
+    (g.diperbarui ? '<div class="kecil">guru mengirim ulang</div>' : "") +
+    (g.catatan ? '<div class="kecil">' + esc(g.catatan) + '</div>' : "");
+}
+
+function tampil() {
+  const G = DATA.guru;
+  let ok = 0, rev = 0, tg = 0;
+  G.forEach((g) => { if (g.status === "Disetujui") ok++; else if (g.status === "Perlu revisi") rev++; else tg++; });
+  $("#dimuat").textContent = DATA.dibuat;
+  $("#lnkSheet").href = DATA.sheetUrl;
+  $("#stats").innerHTML =
+    '<div class="stat"><b>' + G.length + '</b><span>Guru sudah mengisi</span></div>' +
+    '<div class="stat ok"><b>' + ok + '</b><span>Disetujui</span></div>' +
+    '<div class="stat rev"><b>' + rev + '</b><span>Perlu revisi</span></div>' +
+    '<div class="stat"><b>' + tg + '</b><span>Menunggu ditinjau</span></div>';
+  $("#topKomp").innerHTML = daftarBatang(hitung(G, "kompetensi"), G.length || 1);
+  $("#topBentuk").innerHTML = daftarBatang(hitung(G, "bentuk"), G.length || 1);
+  tabel();
+}
+
+const daftar = (a) => a && a.length ? "<ul>" + a.map((x) => "<li>" + esc(x) + "</li>").join("") + "</ul>" : "<p>-</p>";
+
+function detail(g, i) {
+  return '<tr class="det"><td></td><td colspan="6">' +
+    '<b>Temuan utama:</b> ' + esc(g.temuan || "-") +
+    '<div style="margin-top:8px"><b>Butir yang dipilih:</b></div>' + daftar(g.butir) +
+    '<b>Dukungan sekolah:</b>' + daftar(g.dukungan) +
+    (g.dukunganKet ? '<div class="kecil">Penjelasan: ' + esc(g.dukunganKet) + '</div>' : "") +
+    '<div class="noprint" style="margin-top:10px"><b>Catatan pimpinan</b>' +
+    '<textarea id="cat' + i + '" placeholder="Tulis catatan untuk guru (opsional)">' + esc(g.catatan) + '</textarea>' +
+    '<div class="tombol"><button class="primary" data-ubah="' + i + '" data-status="Disetujui">Setujui</button>' +
+    '<button class="danger" data-ubah="' + i + '" data-status="Perlu revisi">Perlu revisi</button>' +
+    '<span id="msg' + i + '" class="kecil"></span></div></div></td></tr>';
+}
+
+function tabel() {
+  const q = $("#cari").value.toLowerCase(), fs = $("#fStatus").value;
+  let h = "", no = 0;
+  DATA.guru.forEach((g, i) => {
+    const teks = [g.nama, g.email, g.mapel, g.kompetensi.join(" "), g.bentuk.join(" ")].join(" ").toLowerCase();
+    if (q && !teks.includes(q)) return;
+    if (fs && g.status !== fs) return;
+    no++;
+    const lap = /^https?:/.test(g.laporan)
+      ? '<a href="' + esc(g.laporan) + '" target="_blank" rel="noopener">Laporan</a>'
+      : '<span class="kecil">Laporan belum ada</span> ';
+    h += "<tr><td>" + no + "</td><td><b>" + esc(g.nama) + '</b><div class="kecil">' + esc(g.email) +
+      (g.jumlahKirim > 1 ? " · dikirim " + g.jumlahKirim + "x" : "") + "</div></td>" +
+      "<td>" + esc(g.mapel) + "</td><td>" + esc(g.kompetensi.join(", ")) + "</td><td>" + esc(g.bentuk.join(", ")) + "</td>" +
+      "<td>" + lencana(g) + '</td><td class="aksi noprint">' + lap +
+      '<button data-tinjau="' + i + '">' + (buka[i] ? "Tutup" : "Tinjau") + "</button></td></tr>";
+    if (buka[i]) h += detail(g, i);
+  });
+  $("#isiTabel").innerHTML = h || '<tr><td colspan="7" class="muted">Tidak ada data.</td></tr>';
+}
+
+function ubah(i, status, tombol) {
+  const g = DATA.guru[i], cat = $("#cat" + i).value.trim(), m = $("#msg" + i);
+  tombol.parentElement.querySelectorAll("button").forEach((b) => { b.disabled = true; });
+  m.textContent = "Menyimpan…";
+  kirim({ aksi: "status", pin: PIN, email: g.email, status: status, catatan: cat })
+    .then((r) => {
+      Object.assign(g, { status: status, catatan: cat, diperbarui: false });
+      buka[i] = false;
+      tampil();
+      if (r.peringatan) alert(r.peringatan);
+    })
+    .catch((e) => {
+      m.textContent = "Gagal: " + String(e.message || e).replace(/^Error:\s*/, "");
+      tombol.parentElement.querySelectorAll("button").forEach((b) => { b.disabled = false; });
+    });
+}
+
+$("#btnMasuk").addEventListener("click", masuk);
+$("#pin").addEventListener("keydown", (e) => { if (e.key === "Enter") masuk(); });
+$("#btnMuat").addEventListener("click", () => muat());
+$("#btnCetak").addEventListener("click", () => window.print());
+$("#cari").addEventListener("input", tabel);
+$("#fStatus").addEventListener("change", tabel);
+$("#isiTabel").addEventListener("click", (e) => {
+  const t = e.target.closest("button");
+  if (!t) return;
+  if (t.dataset.tinjau != null) { const i = +t.dataset.tinjau; buka[i] = !buka[i]; tabel(); }
+  else if (t.dataset.ubah != null) ubah(+t.dataset.ubah, t.dataset.status, t);
+});
+</script>
+</body>
+</html>
