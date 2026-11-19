@@ -86,7 +86,8 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 
 <section>
 <span class="tag">Bagian 2</span><h2>Dasar refleksi</h2>
-<div class="field"><span class="lbl req">Data apa yang mendukung refleksi ini?</span><div class="chips" id="dataRef"></div></div>
+<div class="field"><span class="lbl req">Data apa yang mendukung refleksi ini?</span><div class="chips" id="dataRef"></div>
+<input id="dataLain" data-k="dataLain" placeholder="Tuliskan data lainnya" aria-label="Data pendukung lainnya" hidden></div>
 <div class="field"><label class="req" for="supervisi">Apa temuan utama dari data tersebut?</label><textarea id="supervisi" data-k="supervisi" required placeholder="Contoh: asesmen awal belum dipakai untuk menyesuaikan pembelajaran"></textarea></div>
 </section>
 
@@ -144,7 +145,7 @@ const DATA_REF = ["Supervisi", "Rapor Pendidikan", "Hasil observasi kelas", "Ump
 const DUKUNGAN = ["Waktu / jadwal", "Biaya", "Mentor atau rekan observasi", "Sarana / TIK", "Izin kegiatan", "Lainnya"];
 const MAKS = 3;
 
-const kosong = () => ({ nama: "", email: "", mapel: "", dataRef: [], supervisi: "", butir: [], bentuk: [], dukungan: [], dukunganKet: "" });
+const kosong = () => ({ nama: "", email: "", mapel: "", dataRef: [], dataLain: "", supervisi: "", butir: [], bentuk: [], dukungan: [], dukunganKet: "" });
 let S; try { S = Object.assign(kosong(), JSON.parse(localStorage.getItem(DRAFT_KEY)) || {}); } catch (e) { S = kosong(); }
 const $ = s => document.querySelector(s);
 const h = (tag, attrs = {}, kids = []) => { const e = document.createElement(tag);
@@ -154,8 +155,9 @@ let t0; const simpan = () => { clearTimeout(t0); t0 = setTimeout(() => { try { l
 
 function chips(sel, list, key, pre) { const box = $(sel);
   list.forEach((t, i) => { const cb = h("input", { type: "checkbox", id: pre + i, checked: S[key].includes(t) });
-    cb.addEventListener("change", () => { S[key] = cb.checked ? [...S[key], t] : S[key].filter(x => x !== t); box.classList.remove("invalid"); simpan(); });
+    cb.addEventListener("change", () => { S[key] = cb.checked ? [...S[key], t] : S[key].filter(x => x !== t); box.classList.remove("invalid"); if (key === "dataRef") lain(); simpan(); });
     box.append(h("label", { for: pre + i }, [cb, t])); }); }
+function lain() { const i = $("#dataLain"), on = S.dataRef.includes("Lainnya"); i.hidden = !on; i.required = on; if (on && document.activeElement && document.activeElement.id === "r5") i.focus(); }
 
 function renderButir() { const box = $("#butir"); box.replaceChildren();
   for (const k of Object.keys(KOMPETENSI)) {
@@ -171,7 +173,7 @@ function renderButir() { const box = $("#butir"); box.replaceChildren();
 function init() {
   document.querySelectorAll("[data-k]").forEach(i => { i.value = S[i.dataset.k] ?? ""; i.addEventListener("input", () => { S[i.dataset.k] = i.value; simpan(); }); });
   chips("#dataRef", DATA_REF, "dataRef", "r"); chips("#bentuk", BENTUK, "bentuk", "f"); chips("#dukungan", DUKUNGAN, "dukungan", "d");
-  renderButir(); }
+  lain(); renderButir(); }
 function msg(t, k) { $("#msg").replaceChildren(t ? h("div", { class: "msg " + k, text: t }) : ""); }
 
 $("#form").addEventListener("submit", ev => { ev.preventDefault();
@@ -179,7 +181,7 @@ $("#form").addEventListener("submit", ev => { ev.preventDefault();
   const bad = [...document.querySelectorAll("#form [required]")].filter(i => !i.checkValidity()); bad.forEach(i => i.classList.add("invalid"));
   for (const [key, sel] of [["dataRef", "#dataRef"], ["butir", "#butir"], ["bentuk", "#bentuk"]]) if (!S[key].length) { $(sel).classList.add("invalid"); bad.push($(sel)); }
   if (bad.length) { bad.sort((a, b) => a.compareDocumentPosition(b) & 2 ? 1 : -1)[0].scrollIntoView({ block: "center" }); msg(bad.length + " isian wajib belum lengkap. Isian yang ditandai merah perlu diisi.", "err"); return; }
-  const data = { ...S, butir: S.butir.slice().sort((a, b) => a - b).map(n => { const b = BUTIR[n - 1]; return { no: b.no, kompetensi: b.komp, teks: b.teks }; }), dikirim: new Date().toISOString() };
+  const data = { ...S, dataRef: S.dataRef.map(x => x === "Lainnya" ? "Lainnya: " + S.dataLain.trim() : x), butir: S.butir.slice().sort((a, b) => a - b).map(n => { const b = BUTIR[n - 1]; return { no: b.no, kompetensi: b.komp, teks: b.teks }; }), dikirim: new Date().toISOString() };
   const btn = $("#send"); btn.disabled = true; btn.textContent = "Mengirim…";
   const selesai = (t, k) => { btn.disabled = false; btn.textContent = "Kirim ke Akademik"; msg(t, k); };
   fetch(FORM_ENDPOINT, { method: "POST", body: JSON.stringify(data) }).then(r => r.json())
